@@ -176,13 +176,16 @@ class Rect extends Node{
         this.width = height || 0;
         this.color = color || "#FF0000";
         this.color_frame = color_frame;
+        this.alpha = 1;
     }
     draw(engine){
         let [x, y, w, h] = this.get_bounding_box();
         engine.ctx.beginPath();
         engine.ctx.rect(x, y, w, h);
         engine.ctx.fillStyle = this.color;
+        engine.ctx.globalAlpha = this.alpha;
         engine.ctx.fill();
+        engine.ctx.globalAlpha = 1;
         if(this.color_frame){
             engine.ctx.rect(x, y, w, h);
             engine.ctx.strokeStyle = this.color_frame;
@@ -203,6 +206,26 @@ class Rect extends Node{
     }
 }
 
+
+class Text extends Node{
+    constructor(x, y, text, font){
+        super(x, y);
+        this.text = text;
+        this.font = font;
+    }
+
+    draw(engine){
+        const ctx = engine.ctx;
+        let [x, y] = this.get_position();
+        ctx.beginPath();
+        ctx.font = this.font;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(this.text, x, y);
+        ctx.closePath();
+    }
+
+}
 
 /*
 *
@@ -261,4 +284,21 @@ class Scene extends Node{
     mouse(ev){
 
     }
+}
+
+function rgb_to_hex(rgb) {
+    let component_to_hex = (c) => {
+        var hex = c.toString(16);
+        return hex.length === 1 ? "0" + hex : hex;
+    };
+    return "#" + component_to_hex(rgb.r) + component_to_hex(rgb.g) + component_to_hex(rgb.b);
+}
+
+function hex_to_rgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
 }
