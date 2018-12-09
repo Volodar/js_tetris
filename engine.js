@@ -38,8 +38,6 @@ class Engine {
         document.addEventListener("click", mouse_handler, false);
         document.addEventListener("mouseup", mouse_handler, false);
         document.addEventListener("mousedown", mouse_handler, false);
-        document.addEventListener("touchstart", mouse_handler, false);
-        document.addEventListener("touchend", mouse_handler, false);
         this.set_scene(new Scene());
     }
     set_scene(scene){
@@ -192,10 +190,10 @@ class Button extends Node{
     }
     mouse(ev){
         if(this.is_clicked(ev)) {
-            if (ev.type === "mousedown" || ev.type === "touchstart") {
+            if (ev.type === "mousedown") {
                 this.image.scale = 0.8;
             }
-            else if (ev.type === "mouseup" || ev.type === "touchend") {
+            else if (ev.type === "mouseup") {
                 this.image.scale = 1;
             }
         }
