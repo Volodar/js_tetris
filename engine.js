@@ -5,6 +5,7 @@
 * */
 class Engine {
     constructor(){
+        Engine.prototype.instance = this;
         this.canvas = document.getElementById("myCanvas");
         this.ctx = this.canvas.getContext("2d");
         this.keyboard_handlers = [];
@@ -27,13 +28,16 @@ class Engine {
                 }
             }
         }, false);
-        document.addEventListener("mousemove", (ev) => {
+        let mouse_handler = (ev) => {
             for(let i in this.mouse_handlers) {
                 if(this.mouse_handlers.hasOwnProperty(i)) {
                     this.mouse_handlers[i].mouse(ev);
                 }
             }
-        }, false);
+        };
+        document.addEventListener("click", mouse_handler, false);
+        document.addEventListener("mouseup", mouse_handler, false);
+        document.addEventListener("mousedown", mouse_handler, false);
         this.set_scene(new Scene());
     }
     set_scene(scene){
@@ -79,12 +83,14 @@ class Engine {
         this.mouse_handlers = []
     }
 }
+Engine.prototype.instance = null;
 
 class Node{
     constructor(x, y){
         this.x = x || 0;
         this.y = y || 0;
         this.z = 0;
+        this.scale = 1;
         this.children = [];
         this.parent = null;
     }
@@ -105,6 +111,10 @@ class Node{
     get_position(){
         let pos = this.parent ? this.parent.get_position() : [0, 0];
         return [this.x + pos[0], this.y + pos[1]];
+    }
+    get_scale(){
+        let scale = this.parent ? this.parent.get_scale() : 1.0;
+        return this.scale * scale;
     }
 
     visit(engine){
@@ -129,26 +139,6 @@ class Node{
     update(dx){
     }
 }
-/*
-*
-* Class NodeArc
-*
-* */
-class NodeArc extends Node{
-    constructor(x, y, radius, fill_color){
-        super(x, y);
-        this.radius = radius;
-        this.fill_color = fill_color;
-    }
-
-    draw(engine){
-        let pos = this.get_position();
-        engine.ctx.arc(pos[0], pos[1], this.radius, 0, Math.PI*2);
-        engine.ctx.fillStyle = this.fill_color;
-        engine.ctx.fill();
-    }
-
-}
 
 
 /*
@@ -168,12 +158,50 @@ class Sprite extends Node{
         this.image.src = path_to_image;
     }
     draw(engine){
+        let bb = this.get_bounding_box();
+        engine.ctx.drawImage(this.image, bb[0], bb[1], bb[2], bb[3]);
+    }
+    get_bounding_box(){
+        let scale = this.get_scale();
         let w = this.width !== 0 ? this.width : this.image.width;
         let h = this.height !== 0 ? this.height : this.image.height;
+        w *= scale;
+        h *= scale;
         let pos = this.get_position();
         let x = pos[0] - w / 2;
         let y = pos[1] - h / 2;
-        engine.ctx.drawImage(this.image, x, y, w, h);
+        return [x, y, w, h];
+    }
+}
+
+
+/*
+*
+* Class Button
+*
+* */
+class Button extends Node{
+    constructor(x, y, image){
+        super(x, y);
+        this.image = new Sprite(0, 0, image);
+        this.add_child(this.image);
+
+        Engine.prototype.instance.add_mouse_handler(this);
+    }
+    mouse(ev){
+        if(this.is_clicked(ev)) {
+            if (ev.type === "mousedown") {
+                this.image.scale = 0.8;
+            }
+            else if (ev.type === "mouseup") {
+                this.image.scale = 1;
+            }
+        }
+    }
+    is_clicked(ev){
+        let bb = this.image.get_bounding_box();
+        return ev.clientX >= bb[0] && ev.clientX <= bb[0] + bb[2] &&
+            ev.clientY >= bb[1] && ev.clientY <= bb[1] + bb[3];
     }
 }
 
