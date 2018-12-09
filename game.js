@@ -42,3 +42,33 @@ class GameScene extends Scene{
         }
     }
 }
+
+
+/*
+ *
+ * Figure
+ *
+ * */
+
+class Figure extends Node {
+
+    constructor(forms, x, y) {
+        super(x, y);
+        console.log(x, y);
+        this.form = forms[3];
+        this.figure_coords = [0, 0];
+        this.coords = [];
+        this.form.forEach( (l, r) => {
+            const row = this.form[r];
+
+            row.forEach((i, n) => {
+                console.log(i);
+                if (i > 0) {
+                    const coord = [n, r];
+                    this.coords.push(coord);
+                }
+            });
+            console.log(this.coords);
+        });
+    }
+}

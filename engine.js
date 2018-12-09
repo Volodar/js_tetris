@@ -223,7 +223,7 @@ class Scene extends Node{
             this.x += 10
         }
         if(ev.key === "ArrowUp"){
-            this.y -= 10
+            console.log(this.get_position());
         }
         if(ev.key === "ArrowDown"){
             this.y += 10
@@ -233,3 +233,10 @@ class Scene extends Node{
 
     }
 }
+
+
+
+
+
+
+

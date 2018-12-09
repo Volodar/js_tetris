@@ -14,32 +14,20 @@ const figures = [
     [
         [1, 1],
         [0, 1, 1],
-        {
-            rotatable: true,
-        }
     ],
     [
         [1],
         [1],
         [1],
         [1],
-        {
-            rotatable: true,
-        }
     ],
     [
         [1, 0, 1],
         [1, 1, 1],
-        {
-            rotatable: true,
-        }
     ],
     [
         [0, 1, 0],
         [1, 1, 1],
-        {
-            rotatable: true,
-        }
     ],
     [
         [0, 1, 1],
@@ -105,5 +93,9 @@ const figures = [
         }
     ]
 ];
+
+let figure = new Figure(figures);
+console.log(figure);
+
 
 
