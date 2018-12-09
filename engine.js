@@ -15,24 +15,18 @@ class Engine {
             this.main_loop();
         }, 10);
         document.addEventListener("keydown", (ev) => {
-            for(let i in this.keyboard_handlers) {
-                if(this.keyboard_handlers.hasOwnProperty(i)) {
-                    this.keyboard_handlers[i].key_down(ev);
-                }
+            for(let handler of this.keyboard_handlers) {
+                handler.key_down(ev);
             }
         }, false);
         document.addEventListener("keyup", (ev) => {
-            for(let i in this.keyboard_handlers) {
-                if(this.keyboard_handlers.hasOwnProperty(i)) {
-                    this.keyboard_handlers[i].key_up(ev);
-                }
+            for(let handler of this.keyboard_handlers) {
+                handler.key_up(ev);
             }
         }, false);
         let mouse_handler = (ev) => {
-            for(let i in this.mouse_handlers) {
-                if(this.mouse_handlers.hasOwnProperty(i)) {
-                    this.mouse_handlers[i].mouse(ev);
-                }
+            for(let handler of this.mouse_handlers) {
+                handler.mouse(ev);
             }
         };
         document.addEventListener("click", mouse_handler, false);
@@ -54,10 +48,8 @@ class Engine {
 
     _update_node_recursive(node){
         node.update(this.dt);
-        for(let i in node.children){
-            if(node.children.hasOwnProperty(i)) {
-                this._update_node_recursive(node.children[i]);
-            }
+        for(let child of node.children){
+            this._update_node_recursive(child);
         }
 
     }
@@ -107,8 +99,8 @@ class Node{
     }
 
     get_position(){
-        let pos = this.parent ? this.parent.get_position() : [0, 0];
-        return [this.x + pos[0], this.y + pos[1]];
+        let [x, y] = this.parent ? this.parent.get_position() : [0, 0];
+        return [this.x + x, this.y + y];
     }
     get_scale(){
         let scale = this.parent ? this.parent.get_scale() : 1.0;
@@ -121,14 +113,12 @@ class Node{
             let y = b.z;
             return ((x < y) ? -1 : ((x > y) ? 1 : 0));
         });
-        for(let index in this.children){
-            let child = this.children[index];
+        for(let child of this.children){
             if(child.z < 0)
                 child.visit(engine);
         }
         this.draw(engine, this);
-        for(let index in this.children){
-            let child = this.children[index];
+        for(let child of this.children){
             if(child.z >= 0)
                 child.visit(engine);
         }
@@ -156,9 +146,9 @@ class Sprite extends Node{
         this.image.src = path_to_image;
     }
     draw(engine){
-        let bb = this.get_bounding_box();
+        let [x, y, w, h] = this.get_bounding_box();
         engine.ctx.beginPath();
-        engine.ctx.drawImage(this.image, bb[0], bb[1], bb[2], bb[3]);
+        engine.ctx.drawImage(this.image, x, y, w, h);
         engine.ctx.closePath();
     }
     get_bounding_box(){
@@ -188,13 +178,13 @@ class Rect extends Node{
         this.color_frame = color_frame;
     }
     draw(engine){
-        let bb = this.get_bounding_box();
+        let [x, y, w, h] = this.get_bounding_box();
         engine.ctx.beginPath();
-        engine.ctx.rect(bb[0], bb[1], bb[2], bb[3]);
+        engine.ctx.rect(x, y, w, h);
         engine.ctx.fillStyle = this.color;
         engine.ctx.fill();
         if(this.color_frame){
-            engine.ctx.rect(bb[0], bb[1], bb[2], bb[3]);
+            engine.ctx.rect(x, y, w, h);
             engine.ctx.strokeStyle = this.color_frame;
             engine.ctx.stroke();
         }
@@ -238,9 +228,9 @@ class Button extends Node{
         }
     }
     is_clicked(ev){
-        let bb = this.image.get_bounding_box();
-        return ev.clientX >= bb[0] && ev.clientX <= bb[0] + bb[2] &&
-            ev.clientY >= bb[1] && ev.clientY <= bb[1] + bb[3];
+        let [x, y, w, h] = this.image.get_bounding_box();
+        return ev.clientX >= x && ev.clientX <= x + w &&
+            ev.clientY >= y && ev.clientY <= y + h;
     }
 }
 

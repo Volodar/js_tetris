@@ -1,6 +1,6 @@
-let GRID_SIZE = 32;
-let CELL_EMPTY = 0;
-let COLORS = [
+const GRID_SIZE = 32;
+const CELL_EMPTY = 0;
+const COLORS = [
     "#FF0000",
     "#00FF00",
     "#0000FF",
@@ -21,8 +21,8 @@ class GameBoard{
         }
 
         for(let i=0; i<this.width; ++i) {
-            this.cells[i][0] = COLORS[i % this.width];
-            this.cells[i][1] = COLORS[(i + 3) % this.width];
+            this.cells[i][0] = COLORS[i % COLORS.length];
+            this.cells[i][1] = COLORS[(i + 3) % COLORS.length];
         }
     }
 }
@@ -64,8 +64,9 @@ class GameScene extends Scene {
         //Draw cells
         for(let i=0; i<this.board.width; ++i) {
             for (let j = 0; j < this.board.height; ++j) {
-                if(this.board.cells[i][j] !== CELL_EMPTY){
-                    this.block_marker.color = this.board.cells[i][j];
+                let cell = this.board.cells[i][j];
+                if(cell !== CELL_EMPTY){
+                    this.block_marker.color = cell;
                     this.block_marker.x = X + (i + 0.5) * GRID_SIZE;
                     this.block_marker.y = Y - (j + 0.5) * GRID_SIZE;
                     this.block_marker.draw(engine);
