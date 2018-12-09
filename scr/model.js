@@ -15,6 +15,67 @@ const COLORS = {
     WHITE: "#ffffff",
 };
 
+const figures = [
+    [
+        [1, 1],
+        [0, 1, 1],
+    ],
+    [
+        [1],
+        [1],
+        [1],
+        [1],
+    ],
+    [
+        [1, 0, 1],
+        [1, 1, 1],
+    ],
+    [
+        [0, 1, 0],
+        [1, 1, 1],
+    ],
+    [
+        [0, 1, 1],
+        [1, 1],
+    ],
+    [
+        [1, 1],
+        [1],
+        [1],
+    ],
+    [
+        [1, 1],
+        [1, 1],
+    ],
+    [
+        [1, 1, 1],
+        [0, 0, 1],
+    ],
+    [
+        [1],
+        [1, 1],
+    ],
+    [
+        [0, 1],
+        [1, 1],
+    ],
+    [
+        [1],
+    ],
+    [
+        [0, 1, 0],
+        [1, 1, 1],
+        [0, 1, 0],
+    ],
+    [
+        [1, 1],
+    ]
+];
+
+
+
+console.log();
+
 class GameBoard{
     constructor(){
         this.width = 10;
@@ -36,15 +97,14 @@ class GameBoard{
 
 class Figure extends Node {
 
-    constructor(forms) {
+    constructor(figure) {
         super();
-        this.x = 0;
-        this.y = 0;
-        this.form = forms[3];
-        this.figure_coords = [0, 0];
+        this.i = 4;
+        this.j = 19;
+        this.figure_coords = [this.i, this.j];
         this.coords = [];
-        this.form.forEach( (l, i) => {
-            const row = this.form[i];
+        figure.forEach( (l, i) => {
+            const row = figure[i];
 
             row.forEach((i, j) => {
                 if (i > 0) {
@@ -55,3 +115,5 @@ class Figure extends Node {
         });
     }
 }
+
+let figure = new Figure(figures[3])
