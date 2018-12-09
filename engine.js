@@ -48,10 +48,8 @@ class Engine {
         this.add_mouse_handler(scene);
     }
     draw(){
-        this.ctx.beginPath();
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.root.visit(this);
-        this.ctx.closePath();
     };
 
     _update_node_recursive(node){
@@ -159,12 +157,53 @@ class Sprite extends Node{
     }
     draw(engine){
         let bb = this.get_bounding_box();
+        engine.ctx.beginPath();
         engine.ctx.drawImage(this.image, bb[0], bb[1], bb[2], bb[3]);
+        engine.ctx.closePath();
     }
     get_bounding_box(){
         let scale = this.get_scale();
         let w = this.width !== 0 ? this.width : this.image.width;
         let h = this.height !== 0 ? this.height : this.image.height;
+        w *= scale;
+        h *= scale;
+        let pos = this.get_position();
+        let x = pos[0] - w / 2;
+        let y = pos[1] - h / 2;
+        return [x, y, w, h];
+    }
+}
+
+/*
+*
+* Class Rect
+*
+* */
+class Rect extends Node{
+    constructor(x, y, width, height, color, color_frame){
+        super(x || 0, y || 0);
+        this.height = width || 0;
+        this.width = height || 0;
+        this.color = color || "#FF0000";
+        this.color_frame = color_frame;
+    }
+    draw(engine){
+        let bb = this.get_bounding_box();
+        engine.ctx.beginPath();
+        engine.ctx.rect(bb[0], bb[1], bb[2], bb[3]);
+        engine.ctx.fillStyle = this.color;
+        engine.ctx.fill();
+        if(this.color_frame){
+            engine.ctx.rect(bb[0], bb[1], bb[2], bb[3]);
+            engine.ctx.strokeStyle = this.color_frame;
+            engine.ctx.stroke();
+        }
+        engine.ctx.closePath();
+    }
+    get_bounding_box(){
+        let scale = this.get_scale();
+        let w = this.width;
+        let h = this.height;
         w *= scale;
         h *= scale;
         let pos = this.get_position();
