@@ -55,3 +55,36 @@ class Figure extends Node {
         });
     }
 }
+
+
+class FigureShuffle{
+    constructor(figures){
+        this.figures = figures;
+        this.queue = [];
+        this._shuffle();
+    }
+    pop_figure(){
+        this._check_shuffle();
+        let figure = this.queue[this.queue.length - 1];
+        this.queue.pop();
+        return figure;
+    }
+    get_next_figure(){
+        this._check_shuffle();
+        return this.queue[this.queue.length - 1];
+    }
+    _check_shuffle(){
+        if(!this.queue.length){
+            this._shuffle();
+        }
+    }
+    _shuffle() {
+        this.queue = this.figures.slice();
+        for (let i = this.queue.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            let x = this.queue[i];
+            this.queue[i] = this.queue[j];
+            this.queue[j] = x;
+        }
+    }
+}
