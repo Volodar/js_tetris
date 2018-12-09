@@ -117,32 +117,24 @@ class BlockView extends Node {
 }
 
 
-
-/*
- *
- * Figure
- *
- * */
-
 class Figure extends Node {
 
-    constructor(forms, x, y) {
-        super(x, y);
-        console.log(x, y);
+    constructor(forms) {
+        super();
+        this.x = 0;
+        this.y = 0;
         this.form = forms[3];
         this.figure_coords = [0, 0];
         this.coords = [];
-        this.form.forEach( (l, r) => {
-            const row = this.form[r];
+        this.form.forEach( (l, i) => {
+            const row = this.form[i];
 
-            row.forEach((i, n) => {
-                console.log(i);
+            row.forEach((i, j) => {
                 if (i > 0) {
-                    const coord = [n, r];
+                    const coord = [i, j];
                     this.coords.push(coord);
                 }
             });
-            console.log(this.coords);
         });
     }
 }

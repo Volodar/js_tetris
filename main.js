@@ -32,70 +32,40 @@ const figures = [
     [
         [0, 1, 1],
         [1, 1],
-        {
-            rotatable: true,
-        }
     ],
     [
         [1, 1],
         [1],
         [1],
-        {
-            rotatable: true,
-        }
     ],
     [
         [1, 1],
         [1, 1],
-        {
-            rotatable: false
-        }
     ],
     [
         [1, 1, 1],
         [0, 0, 1],
-        {
-            rotatable: true,
-        }
     ],
     [
         [1],
         [1, 1],
-        {
-            rotatable: true,
-        }
     ],
     [
         [0, 1],
         [1, 1],
-        {
-            rotatable: true,
-        }
     ],
     [
         [1],
-        {
-            rotatable: false
-        }
     ],
     [
         [0, 1, 0],
         [1, 1, 1],
         [0, 1, 0],
-        {
-            rotatable: false
-        }
     ],
     [
         [1, 1],
-        {
-            rotatable: true,
-        }
     ]
 ];
-
-let figure = new Figure(figures);
-console.log(figure);
 
 
 
