@@ -212,6 +212,7 @@ class Text extends Node{
         super(x, y);
         this.text = text;
         this.font = font;
+        this.color = "#808080";
     }
 
     draw(engine){
@@ -221,6 +222,7 @@ class Text extends Node{
         ctx.font = this.font;
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
+        ctx.fillStyle = this.color;
         ctx.fillText(this.text, x, y);
         ctx.closePath();
     }
