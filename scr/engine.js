@@ -270,18 +270,6 @@ class Scene extends Node{
 
     }
     key_up(ev){
-        if(ev.key === "ArrowLeft"){
-            this.x -= 10
-        }
-        if(ev.key === "ArrowRight"){
-            this.x += 10
-        }
-        if(ev.key === "ArrowUp"){
-            this.y -= 10
-        }
-        if(ev.key === "ArrowDown"){
-            this.y += 10
-        }
     }
     mouse(ev){
 

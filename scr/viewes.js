@@ -60,6 +60,20 @@ class GameScene extends Scene {
             this.block_view.visit(engine);
         }
     }
+    key_down(ev){
+        if(ev.key === "ArrowLeft"){
+            this.board.current_figure.i -= 1;
+        }
+        if(ev.key === "ArrowRight"){
+            this.board.current_figure.i += 1;
+        }
+        if(ev.key === "ArrowUp"){
+            this.board.current_figure.rotate();
+        }
+        if(ev.key === "ArrowDown"){
+            this.board.current_figure.j -= 1;
+        }
+    }
 }
 
 class BlockView extends Node {
