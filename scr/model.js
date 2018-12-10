@@ -15,66 +15,79 @@ const COLORS = {
     WHITE: "#ffffff",
 };
 
-const figures = [
-    [
-        [1, 1],
-        [0, 1, 1],
-    ],
-    [
-        [1],
-        [1],
-        [1],
-        [1],
-    ],
-    [
-        [1, 0, 1],
-        [1, 1, 1],
-    ],
-    [
-        [0, 1, 0],
-        [1, 1, 1],
-    ],
-    [
-        [0, 1, 1],
-        [1, 1],
-    ],
-    [
-        [1, 1],
-        [1],
-        [1],
-    ],
-    [
-        [1, 1],
-        [1, 1],
-    ],
-    [
-        [1, 1, 1],
-        [0, 0, 1],
-    ],
-    [
-        [1],
-        [1, 1],
-    ],
-    [
-        [0, 1],
-        [1, 1],
-    ],
-    [
-        [1],
-    ],
-    [
-        [0, 1, 0],
-        [1, 1, 1],
-        [0, 1, 0],
-    ],
-    [
-        [1, 1],
-    ]
+const BLOCK_COLORS = [
+    COLORS.PURPLE,
+    COLORS.LIGHT_BLUE,
+    COLORS.BLUE,
+    COLORS.RED,
+    COLORS.PINK,
+    COLORS.YELLOW,
+    COLORS.ORANGE,
+    COLORS.GREEN,
 ];
 
+const figures = [
+    [
+        [1, 1, 0],
+        [0, 1, 1],
+        [0, 0, 0,]
+    ],
+    [
+        [0, 1, 0, 0],
+        [0, 1, 0, 0],
+        [0, 1, 0, 0],
+        [0, 1, 0, 0],
+    ],
+    [
+        [0, 1, 0],
+        [1, 1, 1],
+        [0, 0, 0,]
+    ],
+    [
+        [0, 1, 1],
+        [1, 1, 0],
+        [0, 0, 0]
+    ],
+    [
+        [1, 1, 0],
+        [1, 0, 0],
+        [1, 0, 0],
+    ],
+    [
+        [1, 1, 0],
+        [0, 1, 0],
+        [0, 1, 0],
+    ],
+    [
+        [0, 1, 1],
+        [0, 1, 1],
+        [0, 0, 0],
+    ],
+    // [
+    //     [1, 0, 1],
+    //     [1, 1, 1],
+    // ],
+    // [
+    //     [1],
+    //     [1, 1],
+    // ],
+    // [
+    //     [0, 1],
+    //     [1, 1],
+    // ],
+    // [
+    //     [1],
+    // ],
+    // [
+    //     [0, 1, 0],
+    //     [1, 1, 1],
+    //     [0, 1, 0],
+    // ],
+    // [
+    //     [1, 1],
+    // ]
+];
 
-
-console.log();
 
 class GameBoard{
     constructor(){
@@ -87,11 +100,20 @@ class GameBoard{
                 this.cells[i][j] = CELL_EMPTY;
             }
         }
+        this.current_figure = null;
+        this.next_figure = null;
+        this.shuffle = new FigureShuffle(figures);
+        this.generate_next_form();
 
+        //TEMP
         for(let i=0; i<this.width; ++i) {
             this.cells[i][0] = COLORS.RED;
             this.cells[i][1] = COLORS.BLUE;
         }
+    }
+    generate_next_form(){
+        this.current_figure = new Figure(this.shuffle.pop_figure());
+        this.next_figure = new Figure(this.shuffle.get_next_figure());
     }
 }
 
@@ -100,23 +122,19 @@ class Figure extends Node {
     constructor(figure) {
         super();
         this.i = 4;
-        this.j = 19;
+        this.j = 18;
+        this.color = BLOCK_COLORS[Math.floor(Math.random() * BLOCK_COLORS.length)];
         this.figure_coords = [this.i, this.j];
         this.coords = [];
-        figure.forEach( (l, i) => {
-            const row = figure[i];
-
-            row.forEach((i, j) => {
-                if (i > 0) {
-                    const coord = [i, j];
-                    this.coords.push(coord);
+        figure.forEach( (row, i_index) => {
+            row.forEach((block, j_index) => {
+                if (block > 0) {
+                    this.coords.push([j_index - 1, i_index - 1]);
                 }
             });
         });
     }
 }
-
-let figure = new Figure(figures[3])
 
 
 class FigureShuffle{

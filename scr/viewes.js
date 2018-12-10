@@ -50,6 +50,15 @@ class GameScene extends Scene {
                 }
             }
         }
+
+        //Draw figure
+        for(let [i, j] of this.board.current_figure.coords){
+            let I = i + this.board.current_figure.i;
+            let J = j + this.board.current_figure.j;
+            this.block_view.set_color(this.board.current_figure.color);
+            this.block_view.set_coord(I, J);
+            this.block_view.visit(engine);
+        }
     }
 }
 
