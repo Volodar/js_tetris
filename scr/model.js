@@ -91,6 +91,7 @@ const figures = [
 
 class GameBoard{
     constructor(){
+        console.log('GameBoard', this);
         this.width = 10;
         this.height = 20;
         this.cells = new Array(this.width);
@@ -115,6 +116,12 @@ class GameBoard{
         this.current_figure = new Figure(this.shuffle.pop_figure());
         this.next_figure = new Figure(this.shuffle.get_next_figure());
     }
+
+    isCollision() {
+
+    }
+
+
 }
 
 class Figure extends Node {
@@ -133,7 +140,7 @@ class Figure extends Node {
                 }
             });
         });
-    }
+    };
 
     rotate(){
         this.coords.forEach((coord, index) => {
