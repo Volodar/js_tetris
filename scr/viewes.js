@@ -1,5 +1,3 @@
-
-
 class GameScene extends Scene {
     constructor(){
         super(0, 0);
@@ -45,7 +43,8 @@ class GameScene extends Scene {
                 let cell = this.board.cells[i][j];
                 if(cell !== CELL_EMPTY){
                     this.block_view.set_color(cell);
-                    this.block_view.set_coord(i, j);
+                    this.block_view.
+        set_coord(i, j);
                     this.block_view.visit(engine);
                 }
             }
@@ -60,20 +59,28 @@ class GameScene extends Scene {
             this.block_view.visit(engine);
         }
     }
+
+
     key_down(ev){
-        if(ev.key === "ArrowLeft"){
-            if (this.board.current_figure.i > 1) {
-                this.board.current_figure.i -= 1;
-            } else {console.log('левый край')}
-        }
-        if(ev.key === "ArrowRight"){
-            this.board.current_figure.i += 1;
-        }
-        if(ev.key === "ArrowUp"){
-            this.board.current_figure.rotate();
-        }
-        if(ev.key === "ArrowDown"){
-            this.board.current_figure.j -= 1;
+        for(let [i, j] of this.board.current_figure.coords) {
+            let I = i + this.board.current_figure.i+1;
+            let J = j + this.board.current_figure.j;
+            let cell = this.board.cells[I][J];
+            if (I>0 && I<this.board.width && J>0 && cell == CELL_EMPTY) {
+                if(ev.key === "ArrowLeft"){
+                    this.board.current_figure.i -= 1;
+                }
+                if(ev.key === "ArrowRight"){
+                    this.board.current_figure.i += 1;
+                }
+                if(ev.key === "ArrowUp"){
+                    this.board.current_figure.rotate();
+                }
+                if(ev.key === "ArrowDown"){
+                    this.board.current_figure.j -= 1;
+                }
+            } else console.log('коллизия');
+
         }
     }
 }
