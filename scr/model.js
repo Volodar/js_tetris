@@ -33,10 +33,10 @@ const figures = [
         [0, 0, 0,]
     ],
     [
-        [0, 1, 0, 0],
-        [0, 1, 0, 0],
-        [0, 1, 0, 0],
-        [0, 1, 0, 0],
+        [0, 0, 1, 0],
+        [0, 0, 1, 0],
+        [0, 0, 1, 0],
+        [0, 0, 1, 0],
     ],
     [
         [0, 1, 0],
@@ -44,9 +44,10 @@ const figures = [
         [0, 0, 0,]
     ],
     [
+        [0, 0, 0],
         [0, 1, 1],
         [1, 1, 0],
-        [0, 0, 0]
+
     ],
     [
         [1, 1, 0],
@@ -91,7 +92,7 @@ const figures = [
 
 class GameBoard{
     constructor(){
-        console.log('GameBoard', this);
+        console.log('', this);
         this.width = 10;
         this.height = 20;
         this.cells = new Array(this.width);
