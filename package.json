@@ -1,0 +1,26 @@
+{
+  "name": "js_tetris",
+  "version": "1.0.0",
+  "description": "js tetris",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Volodar/js_tetris.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Volodar/js_tetris/issues"
+  },
+  "homepage": "https://github.com/Volodar/js_tetris#readme",
+  "scripts": {
+    "view": "http-server ./"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "http-server": "^0.11.1"
+  }
+}
