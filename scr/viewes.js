@@ -62,26 +62,40 @@ class GameScene extends Scene {
 
 
     key_down(ev){
-        for(let [i, j] of this.board.current_figure.coords) {
-            let I = i + this.board.current_figure.i+1;
-            let J = j + this.board.current_figure.j;
-            let cell = this.board.cells[I][J];
-            if (I>0 && I<this.board.width && J>0 && cell == CELL_EMPTY) {
-                if(ev.key === "ArrowLeft"){
-                    this.board.current_figure.i -= 1;
-                }
-                if(ev.key === "ArrowRight"){
-                    this.board.current_figure.i += 1;
-                }
-                if(ev.key === "ArrowUp"){
-                    this.board.current_figure.rotate();
-                }
-                if(ev.key === "ArrowDown"){
-                    this.board.current_figure.j -= 1;
-                }
-            } else console.log('коллизия');
+
+        let coords = this.board.current_figure.coords.map(([i, j]) => {
+            return [i + this.board.current_figure.i, j + this.board.current_figure.j];
+        });
+
+        if(ev.key === "ArrowLeft") {
+            if (coords.every(([i, j]) => i>0)) {
+                this.board.current_figure.i -= 1;
+            } else {
+                console.log('коллизия');
+            }
+        }
+
+        if(ev.key === "ArrowRight"){
+            if (coords.every(([i, j]) => i<this.board.width - 1)) {
+                this.board.current_figure.i += 1;
+            } else {
+                console.log('коллизия');
+            }
+        }
+
+        if(ev.key === "ArrowDown"){
+            if (coords.every(([i, j]) => j>0)) {
+                this.board.current_figure.j -= 1;
+            } else {
+                console.log('коллизия');
+            }
 
         }
+
+        if(ev.key === "ArrowUp"){
+            this.board.current_figure.rotate();
+        }
+
     }
 }
 
