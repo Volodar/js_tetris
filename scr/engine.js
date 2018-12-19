@@ -11,9 +11,10 @@ class Engine {
         this.keyboard_handlers = [];
         this.mouse_handlers = [];
 
+        this.dt = 10.0 / 1000;
         setInterval(() => {
             this.main_loop();
-        }, 10);
+        }, this.dt * 1000);
         document.addEventListener("keydown", (ev) => {
             for(let handler of this.keyboard_handlers) {
                 handler.key_down(ev);
