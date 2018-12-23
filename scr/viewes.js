@@ -105,10 +105,19 @@ class GameScene extends Scene {
             this.board.current_figure.j +=1
         };
 
+        let rotate_right = () => {
+            this.board.current_figure.rotate_right()
+        };
+
+        let rotate_left = () => {
+            this.board.current_figure.rotate_left()
+        };
+
         let offsets = {
             'ArrowLeft': [left, right],
             'ArrowRight': [right, left],
             'ArrowDown': [down, up],
+            'ArrowUp': [rotate_right, rotate_left],
         };
 
         if(ev.key in offsets) {

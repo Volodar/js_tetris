@@ -143,9 +143,14 @@ class Figure extends Node {
         });
     };
 
-    rotate(){
+    rotate_right(){
         this.coords.forEach((coord, index) => {
             this.coords[index] = [coord[1], -coord[0]];
+        });
+    }
+    rotate_left(){
+        this.coords.forEach((coord, index) => {
+            this.coords[index] = [-coord[1], coord[0]];
         });
     }
 }
