@@ -6,6 +6,17 @@ class GameScene extends Scene {
 
         let text = new Text(GRID_SIZE * 5 + 20, 100, "Tetris", "48px roboto");
         this.add_child(text);
+
+        this.timer = 0.0;
+    }
+
+    update(dt){
+        let frequency = 1.0;
+        this.timer += dt;
+        if(this.timer >= frequency){
+            this.timer -= frequency;
+            this.board.current_figure.j -= 1;
+        }
     }
 
     static get_zero_position(){
