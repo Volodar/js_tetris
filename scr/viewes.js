@@ -77,12 +77,12 @@ class GameScene extends Scene {
         });
 
 
-        if (coords.some(([i, j]) => i > 0 && i < this.board.width - 1 && j > 0)) {
-            console.log('все норм', coords, coords.some(([i, j]) => i > 0 && i < this.board.width - 1 && j > 0));
+        if (coords.every(([i, j]) => i >= 0 && i < this.board.width && j >= 0)) {
+            console.log('все норм', coords, coords.every(([i, j]) => i >= 0 && i < this.board.width && j >= 0));
             return false;
         } else {
-            console.log('коллизия', coords, coords.some(([i, j]) => i > 0 && i < this.board.width - 1 && j > 0));
-            return this;
+            console.log('коллизия', coords, coords.every(([i, j]) => i >= 0 && i < this.board.width && j >= 0));
+            return true;
         }
     }
 
