@@ -60,43 +60,58 @@ class GameScene extends Scene {
         }
     }
 
-
-    key_down(ev){
-
+    has_collision() {
         let coords = this.board.current_figure.coords.map(([i, j]) => {
             return [i + this.board.current_figure.i, j + this.board.current_figure.j];
         });
 
-        if(ev.key === "ArrowLeft") {
-            if (coords.every(([i, j]) => i>0)) {
-                this.board.current_figure.i -= 1;
-            } else {
-                console.log('коллизия');
-            }
+
+        if (coords.some(([i, j]) => i > 0 && i < this.board.width - 1 && j > 0)) {
+            console.log('все норм', coords, coords.some(([i, j]) => i > 0 && i < this.board.width - 1 && j > 0));
+            return false;
+        } else {
+            console.log('коллизия', coords, coords.some(([i, j]) => i > 0 && i < this.board.width - 1 && j > 0));
+            return this;
         }
-
-        if(ev.key === "ArrowRight"){
-            if (coords.every(([i, j]) => i<this.board.width - 1)) {
-                this.board.current_figure.i += 1;
-            } else {
-                console.log('коллизия');
-            }
-        }
-
-        if(ev.key === "ArrowDown"){
-            if (coords.every(([i, j]) => j>0)) {
-                this.board.current_figure.j -= 1;
-            } else {
-                console.log('коллизия');
-            }
-
-        }
-
-        if(ev.key === "ArrowUp"){
-            this.board.current_figure.rotate();
-        }
-
     }
+
+
+    key_down(ev){
+
+        let left = () => {
+            this.board.current_figure.i -=1;
+        };
+
+        let right = () => {
+            this.board.current_figure.i +=1
+        };
+
+        let down = () => {
+            this.board.current_figure.j -=1
+        };
+
+        let up = () => {
+            this.board.current_figure.j +=1
+        };
+
+        let offsets = {
+            'ArrowLeft': [left, right],
+            'ArrowRight': [right, left],
+            'ArrowDown': [down, up],
+        };
+
+        if(ev.key in offsets) {
+                console.log('ev in offsets');
+                let [action, undo] = offsets[ev.key];
+                action();
+
+
+                if(this.has_collision()) {
+                    undo();
+                }
+        }
+    }
+
 }
 
 class BlockView extends Node {
