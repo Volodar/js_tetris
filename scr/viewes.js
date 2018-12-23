@@ -76,8 +76,7 @@ class GameScene extends Scene {
             return [i + this.board.current_figure.i, j + this.board.current_figure.j];
         });
 
-
-        if (coords.every(([i, j]) => i >= 0 && i < this.board.width && j >= 0)) {
+        if (coords.every(([i, j]) => i >= 0 && i < this.board.width && j >= 0 && this.board.cells[i][j] == CELL_EMPTY)) {
             console.log('все норм', coords, coords.every(([i, j]) => i >= 0 && i < this.board.width && j >= 0));
             return false;
         } else {
