@@ -16,7 +16,16 @@ class GameScene extends Scene {
         if(this.timer >= frequency){
             this.timer -= frequency;
             this.board.current_figure.j -= 1;
+            if(this.has_collision()){
+                this.board.current_figure.j += 1;
+                this.next_figure()
+            }
         }
+    }
+
+    next_figure(){
+        this.board.join_current_figure()
+        this.board.generate_next_form()
     }
 
     static get_zero_position(){

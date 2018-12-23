@@ -106,11 +106,10 @@ class GameBoard{
         this.next_figure = null;
         this.shuffle = new FigureShuffle(figures);
         this.generate_next_form();
-
-        //TEMP
-        for(let i=0; i<this.width; ++i) {
-            this.cells[i][0] = COLORS.RED;
-            this.cells[i][1] = COLORS.BLUE;
+    }
+    join_current_figure(){
+        for(let [i, j] of this.current_figure.coords){
+            this.cells[i+this.current_figure.i][j+this.current_figure.j] = this.current_figure.color;
         }
     }
     generate_next_form(){
