@@ -115,13 +115,41 @@ class GameBoard{
     generate_next_form(){
         this.current_figure = new Figure(this.shuffle.pop_figure());
         this.next_figure = new Figure(this.shuffle.get_next_figure());
+
+        let coords = this.current_figure.get_world_coords();
+        while(coords.some(([i, j]) => j >= this.height)){
+            this.current_figure.j -=1;
+            coords = this.current_figure.get_world_coords();
+        }
+        if(this.has_collision()){
+            this.finish_game();
+        }
     }
 
-    isCollision() {
-
+    has_collision() {
+        let coords = this.current_figure.get_world_coords();
+        if (coords.every(([i, j]) =>
+            i >= 0 &&
+            i < this.width &&
+            j >= 0 &&
+            j < this.height &&
+            this.cells[i][j] === CELL_EMPTY))
+        {
+            console.log('все норм', coords, coords.every(([i, j]) => i >= 0 && i < this.width && j >= 0));
+            return false;
+        } else {
+            console.log('коллизия', coords, coords.every(([i, j]) => i >= 0 && i < this.width && j >= 0));
+            return true;
+        }
     }
 
+    find_matches(){
+        // TODO: find_matches
+    }
 
+    finish_game(){
+        // TODO: finish_game
+    }
 }
 
 class Figure extends Node {
@@ -129,7 +157,7 @@ class Figure extends Node {
     constructor(figure) {
         super();
         this.i = 4;
-        this.j = 18;
+        this.j = 20;
         this.color = BLOCK_COLORS[Figure.prototype.color_index++ % BLOCK_COLORS.length];
         this.coords = [];
         figure.forEach( (row, i_index) => {
@@ -139,7 +167,18 @@ class Figure extends Node {
                 }
             });
         });
+
+        let rand = Math.floor(Math.random() * 4);
+        for(let i=0; i<rand; ++i) {
+            this.rotate_right();
+        }
     };
+
+    get_world_coords(){
+        return this.coords.map(([i, j]) => {
+            return [i + this.i, j + this.j];
+        });
+    }
 
     rotate_right(){
         this.coords.forEach((coord, index) => {

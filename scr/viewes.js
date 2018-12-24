@@ -16,7 +16,7 @@ class GameScene extends Scene {
         if(this.timer >= frequency){
             this.timer -= frequency;
             this.board.current_figure.j -= 1;
-            if(this.has_collision()){
+            if(this.board.has_collision()){
                 this.board.current_figure.j += 1;
                 this.next_figure()
             }
@@ -24,8 +24,9 @@ class GameScene extends Scene {
     }
 
     next_figure(){
-        this.board.join_current_figure()
-        this.board.generate_next_form()
+        this.board.join_current_figure();
+        this.board.find_matches();
+        this.board.generate_next_form();
     }
 
     static get_zero_position(){
@@ -80,20 +81,6 @@ class GameScene extends Scene {
         }
     }
 
-    has_collision() {
-        let coords = this.board.current_figure.coords.map(([i, j]) => {
-            return [i + this.board.current_figure.i, j + this.board.current_figure.j];
-        });
-
-        if (coords.every(([i, j]) => i >= 0 && i < this.board.width && j >= 0 && this.board.cells[i][j] == CELL_EMPTY)) {
-            console.log('все норм', coords, coords.every(([i, j]) => i >= 0 && i < this.board.width && j >= 0));
-            return false;
-        } else {
-            console.log('коллизия', coords, coords.every(([i, j]) => i >= 0 && i < this.board.width && j >= 0));
-            return true;
-        }
-    }
-
 
     key_down(ev){
 
@@ -129,14 +116,13 @@ class GameScene extends Scene {
         };
 
         if(ev.key in offsets) {
-                console.log('ev in offsets');
-                let [action, undo] = offsets[ev.key];
-                action();
+            console.log('ev in offsets');
+            let [action, undo] = offsets[ev.key];
+            action();
 
-
-                if(this.has_collision()) {
-                    undo();
-                }
+            if(this.board.has_collision()) {
+                undo();
+            }
         }
     }
 
