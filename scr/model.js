@@ -130,8 +130,7 @@ class Figure extends Node {
         super();
         this.i = 4;
         this.j = 18;
-        this.color = BLOCK_COLORS[Math.floor(Math.random() * BLOCK_COLORS.length)];
-        this.figure_coords = [this.i, this.j];
+        this.color = BLOCK_COLORS[Figure.prototype.color_index++ % BLOCK_COLORS.length];
         this.coords = [];
         figure.forEach( (row, i_index) => {
             row.forEach((block, j_index) => {
@@ -153,6 +152,7 @@ class Figure extends Node {
         });
     }
 }
+Figure.prototype.color_index = 0;
 
 
 class FigureShuffle{
