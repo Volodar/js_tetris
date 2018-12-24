@@ -4,7 +4,7 @@ class GameScene extends Scene {
         this.board = new GameBoard();
         this.block_view = new BlockView();
 
-        let text = new Text(GRID_SIZE * 5 + 20, 100, "Tetris", "48px roboto");
+        let text = new TextNode(GRID_SIZE * 5 + 20, 100, "Tetris", "48px roboto");
         this.add_child(text);
 
         this.timer = 0.0;

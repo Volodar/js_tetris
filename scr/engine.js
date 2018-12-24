@@ -208,8 +208,8 @@ class Rect extends Node{
 }
 
 
-class Text extends Node{
-    constructor(x, y, text, font){
+class TextNode extends Node {
+    constructor(x, y, text, font) {
         super(x, y);
         this.text = text;
         this.font = font;
