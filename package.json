@@ -4,7 +4,8 @@
   "description": "js tetris",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "view": "http-server ./"
   },
   "repository": {
     "type": "git",
@@ -16,11 +17,18 @@
     "url": "https://github.com/Volodar/js_tetris/issues"
   },
   "homepage": "https://github.com/Volodar/js_tetris#readme",
-  "scripts": {
-    "view": "http-server ./"
-  },
   "dependencies": {},
   "devDependencies": {
-    "http-server": "^0.11.1"
+    "http-server": "^0.11.1",
+    "qunit": "^2.8.0"
+  },
+  "eslintConfig": {
+    "env": {
+      "es6": true
+    },
+    "rules": {
+      "no-console": "error",
+      "max-len": ["error", 120]
+    }
   }
 }

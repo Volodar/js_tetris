@@ -114,6 +114,7 @@ class GameBoard{
     }
     generate_next_form(){
         this.current_figure = new Figure(this.shuffle.pop_figure());
+        this.current_figure.rotate_random();
         this.next_figure = new Figure(this.shuffle.get_next_figure());
 
         let coords = this.current_figure.get_world_coords();
@@ -167,11 +168,6 @@ class Figure extends Node {
                 }
             });
         });
-
-        let rand = Math.floor(Math.random() * 4);
-        for(let i=0; i<rand; ++i) {
-            this.rotate_right();
-        }
     };
 
     get_world_coords(){
@@ -180,11 +176,19 @@ class Figure extends Node {
         });
     }
 
+    rotate_random(){
+        let rand = Math.floor(Math.random() * 4);
+        for(let i=0; i<rand; ++i) {
+            this.rotate_right();
+        }
+    }
+
     rotate_right(){
         this.coords.forEach((coord, index) => {
             this.coords[index] = [coord[1], -coord[0]];
         });
     }
+
     rotate_left(){
         this.coords.forEach((coord, index) => {
             this.coords[index] = [-coord[1], coord[0]];
