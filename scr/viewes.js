@@ -3,6 +3,7 @@ class GameScene extends Scene {
         super(0, 0);
         this.board = new GameBoard();
         this.block_view = new BlockView();
+        this.bot = new Bot(this.board);
 
         let text = new TextNode(GRID_SIZE * 5 + 20, 100, "Tetris", "48px roboto");
         this.add_child(text);
@@ -11,7 +12,9 @@ class GameScene extends Scene {
     }
 
     update(dt){
-        let frequency = 1.0;
+        this.bot.update(dt);
+
+        let frequency = 0.2;
         this.timer += dt;
         if(this.timer >= frequency){
             this.timer -= frequency;
@@ -116,7 +119,6 @@ class GameScene extends Scene {
         };
 
         if(ev.key in offsets) {
-            console.log('ev in offsets');
             let [action, undo] = offsets[ev.key];
             action();
 

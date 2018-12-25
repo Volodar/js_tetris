@@ -92,7 +92,6 @@ const figures = [
 
 class GameBoard{
     constructor(){
-        console.log('', this);
         this.width = 10;
         this.height = 20;
         this.cells = new Array(this.width);
@@ -110,6 +109,11 @@ class GameBoard{
     join_current_figure(){
         for(let [i, j] of this.current_figure.coords){
             this.cells[i+this.current_figure.i][j+this.current_figure.j] = this.current_figure.color;
+        }
+    }
+    detach_current_figure(){
+        for(let [i, j] of this.current_figure.coords){
+            this.cells[i+this.current_figure.i][j+this.current_figure.j] = CELL_EMPTY;
         }
     }
     generate_next_form(){
@@ -136,10 +140,8 @@ class GameBoard{
             j < this.height &&
             this.cells[i][j] === CELL_EMPTY))
         {
-            console.log('все норм', coords, coords.every(([i, j]) => i >= 0 && i < this.width && j >= 0));
             return false;
         } else {
-            console.log('коллизия', coords, coords.every(([i, j]) => i >= 0 && i < this.width && j >= 0));
             return true;
         }
     }
