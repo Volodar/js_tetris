@@ -2,8 +2,8 @@ class GameScene extends Scene {
     constructor(){
         super(0, 0);
         this.block_view = new BlockView();
-        this.bot = new Bot(this.board);
         this.controller = new GameController();
+        this.bot = new Bot(this.controller);
         let text = new TextNode(GRID_SIZE * 5 + 20, 100, "Tetris", "48px roboto");
         this.add_child(text);
     }

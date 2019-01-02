@@ -5,7 +5,7 @@ class GameController {
         this.timer = 0.0;
     }
     update(dt) {
-        let frequency = 1.0;
+        let frequency = 0.2;
         this.timer += dt;
         if(this.timer >= frequency){
             this.timer -= frequency;
@@ -56,7 +56,7 @@ class GameController {
         };
 
         if(ev.key in offsets) {
-            console.log('ev in offsets');
+            // // console.log('ev in offsets');
             let [action, undo] = offsets[ev.key];
             action();
 
@@ -69,6 +69,11 @@ class GameController {
     join_current_figure(){
         for(let [i, j] of this.model.current_figure.coords){
             this.model.cells[i+this.model.current_figure.i][j+this.model.current_figure.j] = this.model.current_figure.color;
+        }
+    }
+    detach_current_figure(){
+        for(let [i, j] of this.model.current_figure.coords){
+            this.model.cells[i+this.model.current_figure.i][j+this.model.current_figure.j] = CELL_EMPTY;
         }
     }
     generate_next_form(){
@@ -95,10 +100,10 @@ class GameController {
             j < this.model.height &&
             this.model.cells[i][j] === CELL_EMPTY))
         {
-            console.log('все норм', coords, coords.every(([i, j]) => i >= 0 && i < this.model.width && j >= 0));
+            // console.log('все норм', coords, coords.every(([i, j]) => i >= 0 && i < this.model.width && j >= 0));
             return false;
         } else {
-            console.log('коллизия', coords, coords.every(([i, j]) => i >= 0 && i < this.model.width && j >= 0));
+            // console.log('коллизия', coords, coords.every(([i, j]) => i >= 0 && i < this.model.width && j >= 0));
             return true;
         }
     }

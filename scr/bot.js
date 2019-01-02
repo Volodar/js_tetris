@@ -1,6 +1,6 @@
 class Bot {
-    constructor(board) {
-        this.board = board;
+    constructor(controller) {
+        this.controller = controller;
         this.timer = 0.0;
     }
 
@@ -12,11 +12,11 @@ class Bot {
         }
         this.timer -= frequency;
 
-        let J = this.board.current_figure.j;
+        let J = this.controller.model.current_figure.j;
         let max_score = -9999;
         let I = 0;
         let R = 0;
-        for(let i=0; i<this.board.width; ++i){
+        for(let i=0; i<this.controller.model.width; ++i){
             for(let rotate=0; rotate<4; ++rotate){
                 let score = this.iteration(i, rotate);
 
@@ -28,37 +28,37 @@ class Bot {
             }
         }
 
-        if(I < this.board.current_figure.i)
-            this.board.current_figure.i -= 1;
-        else if(I > this.board.current_figure.i)
-            this.board.current_figure.i += 1;
-        this.transform(this.board.current_figure.i, J, R);
+        if(I < this.controller.model.current_figure.i)
+            this.controller.model.current_figure.i -= 1;
+        else if(I > this.controller.model.current_figure.i)
+            this.controller.model.current_figure.i += 1;
+        this.transform(this.controller.model.current_figure.i, J, R);
 
     }
 
     iteration(i, rotate){
-        let I = this.board.current_figure.i;
-        let J = this.board.current_figure.j;
+        let I = this.controller.model.current_figure.i;
+        let J = this.controller.model.current_figure.j;
 
         this.transform(i, J, rotate);
-        if(this.board.has_collision()){
+        if(this.controller.has_collision()){
             this.rollback(I, J, rotate);
             return -999999;
         }
 
         let score = 0;
         for(let j=J; j>=0; --j){
-            this.board.current_figure.j = j;
-            if(this.board.has_collision()){
+            this.controller.model.current_figure.j = j;
+            if(this.controller.has_collision()){
                 break;
             }
-            this.board.join_current_figure();
+            this.controller.join_current_figure();
             let fill = 0;
             let spaces = 0;
             let row = 0;
             let prev = true;
-            for(let i=0; i<this.board.width; ++i){
-                if(this.board.cells[i][j] !== CELL_EMPTY){
+            for(let i=0; i<this.controller.model.width; ++i){
+                if(this.controller.model.cells[i][j] !== CELL_EMPTY){
                     fill += 1;
                     if(prev){
                         row += 1;
@@ -66,15 +66,15 @@ class Bot {
                 } else if(prev) {
                     spaces += 1;
                 }
-                prev = this.board.cells[i][j];
+                prev = this.controller.model.cells[i][j];
             }
             let local = 0;
-            local += fill === this.board.width ? 100 : 0;
+            local += fill === this.controller.model.width ? 100 : 0;
             local -= spaces*2;
             local += row*2;
 
             score += local > 0 ? local * (20 - j) : local * (j + 1);
-            this.board.detach_current_figure();
+            this.controller.detach_current_figure();
         }
         this.rollback(I, J, rotate);
         return score;
@@ -82,17 +82,17 @@ class Bot {
 
     transform(i, j, rotate){
         for(let i=0; i<rotate; ++i){
-            this.board.current_figure.rotate_right();
+            this.controller.rotate_right();
         }
-        this.board.current_figure.i = i;
-        this.board.current_figure.j = j;
+        this.controller.model.current_figure.i = i;
+        this.controller.model.current_figure.j = j;
     }
 
     rollback(i, j, rotate){
-        this.board.current_figure.i = i;
-        this.board.current_figure.j = j;
+        this.controller.model.current_figure.i = i;
+        this.controller.model.current_figure.j = j;
         for(let i=0; i<rotate; ++i){
-            this.board.current_figure.rotate_left();
+            this.controller.rotate_left();
         }
     }
 
