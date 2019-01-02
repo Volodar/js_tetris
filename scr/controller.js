@@ -104,7 +104,28 @@ class GameController {
     }
 
     find_matches(){
-        // TODO: find_matches
+        let line_is_full = (index) => {
+            return !this.model.cells.some((column)=> column[index] === CELL_EMPTY);
+        };
+
+        let remove_line = (index) => {
+            this.model.cells.forEach( (e) => {e[index] = CELL_EMPTY})
+        };
+
+        let down_lines = (index) => {
+            this.model.cells.map((e) => {
+                e.splice(index, 1);
+                e.push(CELL_EMPTY);
+            })
+        };
+        for(let line_index=0; line_index<this.model.height; line_index++){
+            if(line_is_full(line_index)){
+                remove_line(line_index);
+                down_lines(line_index);
+                // count_removed_lines++;
+                line_index--;
+            }
+        }
     }
 
     finish_game(){
