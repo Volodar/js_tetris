@@ -90,68 +90,20 @@ const figures = [
 ];
 
 
-class GameBoard{
-    constructor(){
+class GameModel {
+    constructor() {
         this.width = 10;
         this.height = 20;
         this.cells = new Array(this.width);
-        for(let i=0; i<this.width; ++i){
+        for (let i = 0; i < this.width; ++i) {
             this.cells[i] = new Array(this.height);
-            for(let j=0; j<this.height; ++j){
+            for (let j = 0; j < this.height; ++j) {
                 this.cells[i][j] = CELL_EMPTY;
             }
         }
         this.current_figure = null;
         this.next_figure = null;
         this.shuffle = new FigureShuffle(figures);
-        this.generate_next_form();
-    }
-    join_current_figure(){
-        for(let [i, j] of this.current_figure.coords){
-            this.cells[i+this.current_figure.i][j+this.current_figure.j] = this.current_figure.color;
-        }
-    }
-    detach_current_figure(){
-        for(let [i, j] of this.current_figure.coords){
-            this.cells[i+this.current_figure.i][j+this.current_figure.j] = CELL_EMPTY;
-        }
-    }
-    generate_next_form(){
-        this.current_figure = new Figure(this.shuffle.pop_figure());
-        this.current_figure.rotate_random();
-        this.next_figure = new Figure(this.shuffle.get_next_figure());
-
-        let coords = this.current_figure.get_world_coords();
-        while(coords.some(([i, j]) => j >= this.height)){
-            this.current_figure.j -=1;
-            coords = this.current_figure.get_world_coords();
-        }
-        if(this.has_collision()){
-            this.finish_game();
-        }
-    }
-
-    has_collision() {
-        let coords = this.current_figure.get_world_coords();
-        if (coords.every(([i, j]) =>
-            i >= 0 &&
-            i < this.width &&
-            j >= 0 &&
-            j < this.height &&
-            this.cells[i][j] === CELL_EMPTY))
-        {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    find_matches(){
-        // TODO: find_matches
-    }
-
-    finish_game(){
-        // TODO: finish_game
     }
 }
 
@@ -175,25 +127,6 @@ class Figure extends Node {
     get_world_coords(){
         return this.coords.map(([i, j]) => {
             return [i + this.i, j + this.j];
-        });
-    }
-
-    rotate_random(){
-        let rand = Math.floor(Math.random() * 4);
-        for(let i=0; i<rand; ++i) {
-            this.rotate_right();
-        }
-    }
-
-    rotate_right(){
-        this.coords.forEach((coord, index) => {
-            this.coords[index] = [coord[1], -coord[0]];
-        });
-    }
-
-    rotate_left(){
-        this.coords.forEach((coord, index) => {
-            this.coords[index] = [-coord[1], coord[0]];
         });
     }
 }
