@@ -2,9 +2,30 @@ class GameScene extends Scene {
     constructor(){
         super(0, 0);
         this.block_view = new BlockView();
+        this.next_block_view = new BlockView();
         this.controller = new GameController();
+
         let text = new TextNode(GRID_SIZE * 5 + 20, 100, "Tetris", "48px roboto");
         this.add_child(text);
+
+        this.score_text = new TextNode(GRID_SIZE * 10 + 150, 175, "Score: 0", "36px roboto");
+        this.add_child(this.score_text);
+
+        let next_figure = new Rect(GRID_SIZE * 10 + 150, 275, GRID_SIZE * 4, GRID_SIZE * 4);
+        next_figure.color = COLORS.LIGHT_GRAY;
+        next_figure.z = -1;
+        this.add_child(next_figure);
+        for(let i=0; i<4; ++i) {
+            for(let j=0; j<4; ++j) {
+                let rect = new Rect(
+                    GRID_SIZE * 10 + 150 + GRID_SIZE * (i-1.5),
+                    275 + GRID_SIZE * (j-1.5),
+                    GRID_SIZE - 2, GRID_SIZE - 2);
+                rect.color = COLORS.WHITE;
+                rect.z = -1;
+                this.add_child(rect);
+            }
+        }
     }
 
     update(dt){
@@ -64,6 +85,15 @@ class GameScene extends Scene {
             this.block_view.set_color(this.controller.model.current_figure.color);
             this.block_view.set_coord(I, J);
             this.block_view.visit(engine);
+        }
+
+        //Draw next figure
+        for(let [i, j] of this.controller.model.next_figure.coords){
+            this.next_block_view.set_color(this.controller.model.next_figure.color);
+            this.next_block_view.set_coord(i + 14, j + 15);
+            this.next_block_view.x += 2;
+            this.next_block_view.y += 7;
+            this.next_block_view.visit(engine);
         }
     }
 }
