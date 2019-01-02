@@ -1,32 +1,18 @@
 class GameScene extends Scene {
     constructor(){
         super(0, 0);
-        this.board = new GameBoard();
         this.block_view = new BlockView();
-
+        this.controller = new GameController();
         let text = new TextNode(GRID_SIZE * 5 + 20, 100, "Tetris", "48px roboto");
         this.add_child(text);
-
-        this.timer = 0.0;
     }
 
     update(dt){
-        let frequency = 1.0;
-        this.timer += dt;
-        if(this.timer >= frequency){
-            this.timer -= frequency;
-            this.board.current_figure.j -= 1;
-            if(this.board.has_collision()){
-                this.board.current_figure.j += 1;
-                this.next_figure()
-            }
-        }
+        this.controller.update(dt);
     }
 
-    next_figure(){
-        this.board.join_current_figure();
-        this.board.find_matches();
-        this.board.generate_next_form();
+    key_down(ev){
+        this.controller.key_down(ev);
     }
 
     static get_zero_position(){
@@ -41,15 +27,15 @@ class GameScene extends Scene {
         //Draw grid
         let ctx = engine.ctx;
         ctx.beginPath();
-        for(let i=0; i<this.board.width + 1; ++i){
+        for(let i=0; i<this.controller.model.width + 1; ++i){
             let x = X + GRID_SIZE * i;
-            let y = Y - GRID_SIZE * this.board.height;
+            let y = Y - GRID_SIZE * this.controller.model.height;
             ctx.moveTo(x, Y);
             ctx.lineTo(x, y);
             ctx.stroke();
         }
-        for(let i=0; i<this.board.height + 1; ++i){
-            let x = X + GRID_SIZE * this.board.width;
+        for(let i=0; i<this.controller.model.height + 1; ++i){
+            let x = X + GRID_SIZE * this.controller.model.width;
             let y = Y - GRID_SIZE * i;
             ctx.moveTo(X, y);
             ctx.lineTo(x, y);
@@ -59,9 +45,9 @@ class GameScene extends Scene {
         ctx.closePath();
 
         //Draw cells
-        for(let i=0; i<this.board.width; ++i) {
-            for (let j = 0; j < this.board.height; ++j) {
-                let cell = this.board.cells[i][j];
+        for(let i=0; i<this.controller.model.width; ++i) {
+            for (let j = 0; j < this.controller.model.height; ++j) {
+                let cell = this.controller.model.cells[i][j];
                 if(cell !== CELL_EMPTY){
                     this.block_view.set_color(cell);
                     this.block_view.
@@ -72,60 +58,14 @@ class GameScene extends Scene {
         }
 
         //Draw figure
-        for(let [i, j] of this.board.current_figure.coords){
-            let I = i + this.board.current_figure.i;
-            let J = j + this.board.current_figure.j;
-            this.block_view.set_color(this.board.current_figure.color);
+        for(let [i, j] of this.controller.model.current_figure.coords){
+            let I = i + this.controller.model.current_figure.i;
+            let J = j + this.controller.model.current_figure.j;
+            this.block_view.set_color(this.controller.model.current_figure.color);
             this.block_view.set_coord(I, J);
             this.block_view.visit(engine);
         }
     }
-
-
-    key_down(ev){
-
-        let left = () => {
-            this.board.current_figure.i -=1;
-        };
-
-        let right = () => {
-            this.board.current_figure.i +=1
-        };
-
-        let down = () => {
-            this.board.current_figure.j -=1
-        };
-
-        let up = () => {
-            this.board.current_figure.j +=1
-        };
-
-        let rotate_right = () => {
-            this.board.current_figure.rotate_right()
-        };
-
-        let rotate_left = () => {
-            this.board.current_figure.rotate_left()
-        };
-
-        let offsets = {
-            'ArrowLeft': [left, right],
-            'ArrowRight': [right, left],
-            'ArrowDown': [down, up],
-            'ArrowUp': [rotate_right, rotate_left],
-        };
-
-        if(ev.key in offsets) {
-            console.log('ev in offsets');
-            let [action, undo] = offsets[ev.key];
-            action();
-
-            if(this.board.has_collision()) {
-                undo();
-            }
-        }
-    }
-
 }
 
 class BlockView extends Node {
