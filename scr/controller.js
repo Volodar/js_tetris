@@ -77,9 +77,18 @@ class GameController {
         }
     }
     generate_next_form(){
-        this.model.current_figure = new Figure(this.model.shuffle.pop_figure());
-        this.rotate_random();
-        this.model.next_figure = new Figure(this.model.shuffle.get_next_figure());
+        if(this.model.next_figure === null){
+            this.model.current_figure = new Figure(this.model.shuffle.pop_figure());
+            this.rotate_count(this.model.current_figure, Math.floor(Math.random() * 4));
+
+            this.model.next_figure = new Figure(this.model.shuffle.pop_figure());
+            this.rotate_count(this.model.next_figure, Math.floor(Math.random() * 4));
+        } else {
+            this.model.current_figure = this.model.next_figure;
+
+            this.model.next_figure = new Figure(this.model.shuffle.pop_figure());
+            this.rotate_count(this.model.next_figure, Math.floor(Math.random() * 4));
+        }
 
         let coords = this.model.current_figure.get_world_coords();
         while(coords.some(([i, j]) => j >= this.model.height)){
@@ -137,22 +146,25 @@ class GameController {
         // TODO: finish_game
     }
 
-    rotate_random(){
-        let rand = Math.floor(Math.random() * 4);
-        for(let i=0; i<rand; ++i) {
-            this.rotate_right();
+    rotate_count(figure, count){
+        for(let i=0; i<count; ++i) {
+            this.rotate_right(figure);
         }
     }
 
-    rotate_right(){
-        this.model.current_figure.coords.forEach((coord, index) => {
-            this.model.current_figure.coords[index] = [coord[1], -coord[0]];
+    rotate_right(figure=undefined){
+        if(figure === undefined)
+            figure = this.model.current_figure;
+        figure.coords.forEach((coord, index) => {
+            figure.coords[index] = [coord[1], -coord[0]];
         });
     }
 
-    rotate_left(){
-        this.model.current_figure.coords.forEach((coord, index) => {
-            this.model.current_figure.coords[index] = [-coord[1], coord[0]];
+    rotate_left(figure=undefined){
+        if(figure === undefined)
+            figure = this.model.current_figure;
+        figure.coords.forEach((coord, index) => {
+            figure.coords[index] = [-coord[1], coord[0]];
         });
     }
 }
