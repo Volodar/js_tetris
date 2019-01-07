@@ -27,43 +27,72 @@ const BLOCK_COLORS = [
 ];
 
 const figures = [
-    [
-        [1, 1, 0],
-        [0, 1, 1],
-        [0, 0, 0,]
-    ],
-    [
-        [0, 0, 1, 0],
-        [0, 0, 1, 0],
-        [0, 0, 1, 0],
-        [0, 0, 1, 0],
-    ],
-    [
-        [0, 1, 0],
-        [1, 1, 1],
-        [0, 0, 0,]
-    ],
-    [
-        [0, 0, 0],
-        [0, 1, 1],
-        [1, 1, 0],
 
-    ],
-    [
-        [1, 1, 0],
-        [1, 0, 0],
-        [1, 0, 0],
-    ],
-    [
-        [1, 1, 0],
-        [0, 1, 0],
-        [0, 1, 0],
-    ],
-    [
-        [0, 1, 1],
-        [0, 1, 1],
-        [0, 0, 0],
-    ],
+        {
+            'coords': [
+                [1, 1, 0],
+                [0, 1, 1],
+                [0, 0, 0,]
+            ],
+
+            'rotate': 2
+        },
+
+        {
+            'coords': [
+                [0, 0, 1, 0],
+                [0, 0, 1, 0],
+                [0, 0, 1, 0],
+                [0, 0, 1, 0],
+            ],
+
+            'rotate': 2
+        },
+
+        {
+            'coords': [
+                [0, 1, 0],
+                [1, 1, 1],
+                [0, 0, 0,]
+            ]
+        },
+
+        {
+            'coords': [
+                [1, 1, 0],
+                [1, 0, 0],
+                [1, 0, 0],
+            ]
+        },
+
+        {
+            'coords': [
+                [0, 0, 0],
+                [0, 1, 1],
+                [1, 1, 0],
+            ],
+
+            'rotate': 2
+        },
+
+        {
+            'coords': [
+                [1, 1, 0],
+                [0, 1, 0],
+                [0, 1, 0],
+            ]
+        },
+
+        {
+            'coords': [
+                [0, 1, 1],
+                [0, 1, 1],
+                [0, 0, 0],
+            ],
+
+            'rotate': 1
+        },
+
 ];
 
 class GameModel{
@@ -95,7 +124,8 @@ class Figure extends Node {
         this.j = 20;
         this.color = BLOCK_COLORS[Figure.prototype.color_index++ % BLOCK_COLORS.length];
         this.coords = [];
-        figure.forEach( (row, i_index) => {
+        this.rotate = figure["rotate"];
+        figure["coords"].forEach( (row, i_index) => {
             row.forEach((block, j_index) => {
                 if (block > 0) {
                     this.coords.push([j_index - 1, i_index - 1]);
