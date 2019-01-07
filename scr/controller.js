@@ -169,8 +169,10 @@ class GameController {
     }
 
     paused_game() {
-        this.game_paused = true;
-        this.view.on_game_paused();
+        if(!this.game_paused) {
+            this.game_paused = true;
+            this.view.on_game_paused();
+        }
     }
 
     resume_game() {
