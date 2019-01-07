@@ -3,11 +3,12 @@ class GameController {
         this.model = new GameModel();
         this.generate_next_form();
         this.timer = 0.0;
+        this.game_finished = false;
     }
     update(dt) {
         let frequency = 1.0;
         this.timer += dt;
-        if(this.timer >= frequency){
+        if(this.timer >= frequency && !this.game_finished){
             this.timer -= frequency;
             this.model.current_figure.j -= 1;
             if(this.has_collision()){
@@ -155,7 +156,8 @@ class GameController {
     }
 
     finish_game(){
-        // TODO: finish_game
+        this.game_finished = true;
+        //TODO: push event to view
     }
 
     rotate_count(figure, count){
