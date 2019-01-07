@@ -11,21 +11,21 @@ class GameScene extends Scene {
         this.score_text = new TextNode(GRID_SIZE * 10 + 150, 175, "Score: 0", "36px roboto");
         this.add_child(this.score_text);
 
-        let next_figure = new Rect(GRID_SIZE * 10 + 150, 275, GRID_SIZE * 4, GRID_SIZE * 4);
-        next_figure.color = COLORS.LIGHT_GRAY;
-        next_figure.z = -1;
-        this.add_child(next_figure);
-        for(let i=0; i<4; ++i) {
-            for(let j=0; j<4; ++j) {
-                let rect = new Rect(
-                    GRID_SIZE * 10 + 150 + GRID_SIZE * (i-1.5),
-                    275 + GRID_SIZE * (j-1.5),
-                    GRID_SIZE - 2, GRID_SIZE - 2);
-                rect.color = COLORS.WHITE;
-                rect.z = -1;
-                this.add_child(rect);
-            }
-        }
+        // let next_figure = new Rect(GRID_SIZE * 10 + 150, 275, GRID_SIZE * 4, GRID_SIZE * 4);
+        // next_figure.color = COLORS.LIGHT_GRAY;
+        // next_figure.z = -1;
+        // this.add_child(next_figure);
+        // for(let i=0; i<4; ++i) {
+        //     for(let j=0; j<4; ++j) {
+        //         let rect = new Rect(
+        //             GRID_SIZE * 10 + 150 + GRID_SIZE * (i-1.5),
+        //             275 + GRID_SIZE * (j-1.5),
+        //             GRID_SIZE - 2, GRID_SIZE - 2);
+        //         rect.color = COLORS.WHITE;
+        //         rect.z = -1;
+        //         this.add_child(rect);
+        //     }
+        // }
     }
 
     update(dt){
