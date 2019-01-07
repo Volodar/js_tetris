@@ -5,18 +5,23 @@ class GameController {
         this.generate_next_form();
         this.timer = 0.0;
         this.game_finished = false;
+        this.game_paused = false;
     }
     update(dt) {
-        let frequency = 1;
+        let frequency = this.get_current_frequence();
         this.timer += dt;
-        if(this.timer >= frequency && !this.game_finished){
-            this.timer -= frequency;
+        if(this.timer >= frequency && !this.game_finished && !this.game_paused){
+            this.timer = 0;
             this.model.current_figure.j -= 1;
             if(this.has_collision()){
                 this.model.current_figure.j += 1;
                 this.next_figure()
             }
         }
+    }
+
+    get_current_frequence() {
+        return 1.0 - (this.model.level) / 10.0;
     }
 
     next_figure(){
@@ -155,11 +160,21 @@ class GameController {
             this.model.score += 150;
         }
         this.model.rows += count_removed_lines;
+        this.model.level = Math.round(this.model.rows / 5);
     }
 
     finish_game(){
         this.game_finished = true;
         this.view.on_game_over();
+    }
+
+    paused_game() {
+        this.game_paused = true;
+        this.view.on_game_paused();
+    }
+
+    resume_game() {
+        this.game_paused = false;
     }
 
     rotate_count(figure, count){

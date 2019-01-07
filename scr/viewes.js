@@ -9,6 +9,9 @@ class GameScene extends Scene {
 
         this.score_text = new TextNode(GRID_SIZE * 10 + 150, 175, "Score: 0", "36px roboto");
         this.add_child(this.score_text);
+
+        this.level_text = new TextNode(GRID_SIZE * 10 + 150, 400, "Score: 0", "36px roboto");
+        this.add_child(this.level_text);
     }
 
     new_game(){
@@ -25,15 +28,29 @@ class GameScene extends Scene {
         this.add_child(window);
         window.x = 300;
         window.y = 400;
+        window.z = 1;
+    }
+
+    on_game_paused() {
+       let window = new WindowPausedGame(this);
+       this.add_child(window);
+        window.x = 300;
+        window.y = 400;
+        window.z = 1;
     }
 
     update(dt){
         this.controller.update(dt);
         this.score_text.text = "Score: " + this.controller.model.score;
+        this.level_text.text = "Level: " + (this.controller.model.level + 1);
     }
 
     key_down(ev){
         this.controller.key_down(ev);
+        if (ev.keyCode === 27) {
+            this.controller.paused_game();
+        }
+
     }
 
     static get_zero_position(){
@@ -150,10 +167,41 @@ class WindowFinishGame extends Node {
         let score_text = new TextNode(0, -110, "Score: " + score, "36px Arial");
         this.add_child(score_text);
 
-        let level_text = new TextNode(0, -38, "Level: " + level, "36px Arial");
+        let level_text = new TextNode(0, -38, "Level: " + (level + 1), "36px Arial");
         this.add_child(level_text);
 
         let row_text = new TextNode(0, 32, "Rows: " + rows, "36px Arial");
         this.add_child(row_text);
+    }
+}
+
+class WindowPausedGame extends Node {
+    constructor(scene){
+        super();
+        this.scene = scene;
+
+        let back = new Sprite(0, 0, "assets/window_pause.png");
+        this.add_child(back);
+
+        let button = new Button(0, 62, "assets/button.png");
+        this.add_child(button);
+        let restart_text = new TextNode(0, 2, "Restart", "36px Arial");
+        button.add_child(restart_text);
+        button.callback = ()=>{
+            this.scene.new_game();
+            this.destroy_self();
+        };
+
+        let button2 = new Button(0, -20, "assets/button.png");
+        this.add_child(button2);
+        let resume_text = new TextNode(0, 2, "Resume", "36px Arial");
+        button2.add_child(resume_text);
+        button2.callback = ()=>{
+            this.scene.controller.resume_game();
+            this.destroy_self();
+        };
+
+        let caption = new TextNode(0, -90, "Pause", "48px Arial");
+        this.add_child(caption);
     }
 }
