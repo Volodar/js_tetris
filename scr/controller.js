@@ -186,16 +186,30 @@ class GameController {
     rotate_right(figure=undefined){
         if(figure === undefined)
             figure = this.model.current_figure;
+
+        figure.current_rotate_state += 1;
+        figure.current_rotate_state = figure.current_rotate_state % 4;
         figure.coords.forEach((coord, index) => {
             figure.coords[index] = [coord[1], -coord[0]];
         });
+        if(figure.current_rotate_state >= figure.rotate){
+            this.rotate_right(figure);
+        }
     }
 
     rotate_left(figure=undefined){
         if(figure === undefined)
             figure = this.model.current_figure;
+
+        figure.current_rotate_state -= 1;
+        if(figure.current_rotate_state < 0){
+            figure.current_rotate_state += 4;
+        }
         figure.coords.forEach((coord, index) => {
             figure.coords[index] = [-coord[1], coord[0]];
         });
+        if(figure.current_rotate_state >= figure.rotate){
+            this.rotate_left(figure);
+        }
     }
 }

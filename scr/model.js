@@ -27,72 +27,66 @@ const BLOCK_COLORS = [
 ];
 
 const figures = [
+    {
+        'coords': [
+            [1, 1, 0],
+            [0, 1, 1],
+            [0, 0, 0,]
+        ],
+        'rotate': 2
+    },
 
-        {
-            'coords': [
-                [1, 1, 0],
-                [0, 1, 1],
-                [0, 0, 0,]
-            ],
+    {
+        'coords': [
+            [0, 0, 1, 0],
+            [0, 0, 1, 0],
+            [0, 0, 1, 0],
+            [0, 0, 1, 0],
+        ],
+        'rotate': 2
+    },
 
-            'rotate': 2
-        },
+    {
+        'coords': [
+            [0, 0, 0],
+            [0, 1, 0],
+            [1, 1, 1]
+        ]
+    },
 
-        {
-            'coords': [
-                [0, 0, 1, 0],
-                [0, 0, 1, 0],
-                [0, 0, 1, 0],
-                [0, 0, 1, 0],
-            ],
+    {
+        'coords': [
+            [1, 1, 0],
+            [1, 0, 0],
+            [1, 0, 0],
+        ]
+    },
 
-            'rotate': 2
-        },
+    {
+        'coords': [
+            [0, 0, 0],
+            [0, 1, 1],
+            [1, 1, 0]
+        ],
+        'rotate': 2
+    },
 
-        {
-            'coords': [
-                [0, 1, 0],
-                [1, 1, 1],
-                [0, 0, 0,]
-            ]
-        },
+    {
+        'coords': [
+            [0, 1, 1],
+            [0, 0, 1],
+            [0, 0, 1],
+        ]
+    },
 
-        {
-            'coords': [
-                [1, 1, 0],
-                [1, 0, 0],
-                [1, 0, 0],
-            ]
-        },
-
-        {
-            'coords': [
-                [0, 0, 0],
-                [0, 1, 1],
-                [1, 1, 0],
-            ],
-
-            'rotate': 2
-        },
-
-        {
-            'coords': [
-                [1, 1, 0],
-                [0, 1, 0],
-                [0, 1, 0],
-            ]
-        },
-
-        {
-            'coords': [
-                [0, 1, 1],
-                [0, 1, 1],
-                [0, 0, 0],
-            ],
-
-            'rotate': 1
-        },
-
+    {
+        'coords': [
+            [0, 1, 1],
+            [0, 1, 1],
+            [0, 0, 0],
+        ],
+        'rotate': 1
+    },
 ];
 
 class GameModel{
@@ -124,11 +118,14 @@ class Figure extends Node {
         this.j = 20;
         this.color = BLOCK_COLORS[Figure.prototype.color_index++ % BLOCK_COLORS.length];
         this.coords = [];
-        this.rotate = figure["rotate"];
+        this.rotate = figure["rotate"] || 4;
+        this.current_rotate_state = 0;
+
+        let offset = Math.floor(figure["coords"].length / 2);
         figure["coords"].forEach( (row, i_index) => {
             row.forEach((block, j_index) => {
                 if (block > 0) {
-                    this.coords.push([j_index - 1, i_index - 1]);
+                    this.coords.push([j_index - offset, i_index - offset]);
                 }
             });
         });
