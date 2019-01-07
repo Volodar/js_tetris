@@ -21,7 +21,8 @@ class GameController {
     }
 
     get_current_frequence() {
-        return 1.0 - (this.model.level) / 10.0;
+        let f = 0.7 - (this.model.level) / 15.0;
+        return Math.max(0.2, f);
     }
 
     next_figure(){
@@ -160,7 +161,7 @@ class GameController {
             this.model.score += 150;
         }
         this.model.rows += count_removed_lines;
-        this.model.level = Math.round(this.model.rows / 5);
+        this.model.level = Math.floor(this.model.rows / 5);
     }
 
     finish_game(){
