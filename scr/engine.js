@@ -37,8 +37,8 @@ class Engine {
     }
     set_scene(scene){
         this.root = scene;
-        this.clear_keyboard_handler();
-        this.clear_mouse_handler();
+        // this.clear_keyboard_handler();
+        // this.clear_mouse_handler();
         this.add_keyboard_handler(scene);
         this.add_mouse_handler(scene);
     }
@@ -97,6 +97,12 @@ class Node{
         let index = this.children.indexOf(child);
         this.children.splice(index, 1);
         child.parent = null;
+    }
+
+    destroy_self(){
+        if(this.parent){
+            this.parent.remove_child(this);
+        }
     }
 
     get_position(){
@@ -240,6 +246,7 @@ class Button extends Node{
         super(x, y);
         this.image = new Sprite(0, 0, image);
         this.add_child(this.image);
+        this.callback = null;
 
         Engine.prototype.instance.add_mouse_handler(this);
     }
@@ -250,6 +257,9 @@ class Button extends Node{
             }
             else if (ev.type === "mouseup") {
                 this.image.scale = 1;
+                if(this.callback !== null){
+                    this.callback();
+                }
             }
         }
     }

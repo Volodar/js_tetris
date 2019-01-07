@@ -1,31 +1,30 @@
 class GameScene extends Scene {
     constructor(){
         super(0, 0);
-        this.block_view = new BlockView();
-        this.next_block_view = new BlockView();
-        this.controller = new GameController();
+
+        this.new_game();
 
         let text = new TextNode(GRID_SIZE * 5 + 20, 100, "Tetris", "48px roboto");
         this.add_child(text);
 
         this.score_text = new TextNode(GRID_SIZE * 10 + 150, 175, "Score: 0", "36px roboto");
         this.add_child(this.score_text);
+    }
 
-        // let next_figure = new Rect(GRID_SIZE * 10 + 150, 275, GRID_SIZE * 4, GRID_SIZE * 4);
-        // next_figure.color = COLORS.LIGHT_GRAY;
-        // next_figure.z = -1;
-        // this.add_child(next_figure);
-        // for(let i=0; i<4; ++i) {
-        //     for(let j=0; j<4; ++j) {
-        //         let rect = new Rect(
-        //             GRID_SIZE * 10 + 150 + GRID_SIZE * (i-1.5),
-        //             275 + GRID_SIZE * (j-1.5),
-        //             GRID_SIZE - 2, GRID_SIZE - 2);
-        //         rect.color = COLORS.WHITE;
-        //         rect.z = -1;
-        //         this.add_child(rect);
-        //     }
-        // }
+    new_game(){
+        this.block_view = new BlockView();
+        this.next_block_view = new BlockView();
+        this.controller = new GameController(this);
+    }
+
+    on_game_over(){
+        let window = new WindowFinishGame(this,
+            this.controller.model.score,
+            this.controller.model.level,
+            this.controller.model.rows);
+        this.add_child(window);
+        window.x = 300;
+        window.y = 400;
     }
 
     update(dt){
@@ -125,5 +124,36 @@ class BlockView extends Node {
         let [X, Y] = GameScene.get_zero_position();
         this.x = X + (i + 0.5) * GRID_SIZE;
         this.y = Y - (j + 0.5) * GRID_SIZE;
+    }
+}
+
+class WindowFinishGame extends Node {
+    constructor(scene, score, level, rows){
+        super();
+        this.scene = scene;
+
+        let back = new Sprite(0, 0, "assets/window_finished_back.png");
+        this.add_child(back);
+
+        let button = new Button(0, 150, "assets/button.png");
+        this.add_child(button);
+        let restart_text = new TextNode(0, 2, "Restart", "36px Arial");
+        button.add_child(restart_text);
+        button.callback = ()=>{
+            this.scene.new_game();
+            this.destroy_self();
+        };
+
+        let caption = new TextNode(0, -190, "Game Over", "48px Arial");
+        this.add_child(caption);
+
+        let score_text = new TextNode(0, -110, "Score: " + score, "36px Arial");
+        this.add_child(score_text);
+
+        let level_text = new TextNode(0, -38, "Level: " + level, "36px Arial");
+        this.add_child(level_text);
+
+        let row_text = new TextNode(0, 32, "Rows: " + rows, "36px Arial");
+        this.add_child(row_text);
     }
 }

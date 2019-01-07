@@ -1,12 +1,13 @@
 class GameController {
-    constructor() {
+    constructor(view) {
         this.model = new GameModel();
+        this.view = view;
         this.generate_next_form();
         this.timer = 0.0;
         this.game_finished = false;
     }
     update(dt) {
-        let frequency = 1.0;
+        let frequency = 1;
         this.timer += dt;
         if(this.timer >= frequency && !this.game_finished){
             this.timer -= frequency;
@@ -153,11 +154,12 @@ class GameController {
         if (count_removed_lines === 4) {
             this.model.score += 150;
         }
+        this.model.rows += count_removed_lines;
     }
 
     finish_game(){
         this.game_finished = true;
-        //TODO: push event to view
+        this.view.on_game_over();
     }
 
     rotate_count(figure, count){

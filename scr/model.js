@@ -79,11 +79,12 @@ class GameModel{
             }
         }
         this.score = 0;
+        this.level = 0;
+        this.rows = 0;
         this.current_figure = null;
         this.next_figure = null;
         this.shuffle = new FigureShuffle(figures);
     }
-
 }
 
 class Figure extends Node {
