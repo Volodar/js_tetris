@@ -30,6 +30,7 @@ class GameScene extends Scene {
 
     update(dt){
         this.controller.update(dt);
+        this.score_text.text = "Score: " + this.controller.model.score;
     }
 
     key_down(ev){

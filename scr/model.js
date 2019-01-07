@@ -89,7 +89,6 @@ const figures = [
     // ]
 ];
 
-
 class GameModel{
     constructor(){
         console.log('', this);
@@ -102,6 +101,7 @@ class GameModel{
                 this.cells[i][j] = CELL_EMPTY;
             }
         }
+        this.score = 0;
         this.current_figure = null;
         this.next_figure = null;
         this.shuffle = new FigureShuffle(figures);

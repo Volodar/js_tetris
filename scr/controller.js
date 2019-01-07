@@ -127,13 +127,30 @@ class GameController {
                 e.push(CELL_EMPTY);
             })
         };
+        let count_removed_lines = 0;
         for(let line_index=0; line_index<this.model.height; line_index++){
             if(line_is_full(line_index)){
                 remove_line(line_index);
                 down_lines(line_index);
-                // count_removed_lines++;
+                count_removed_lines++;
                 line_index--;
             }
+        }
+
+        if (count_removed_lines === 1) {
+            this.model.score += 10;
+        }
+
+        if (count_removed_lines === 2) {
+            this.model.score += 30;
+        }
+
+        if (count_removed_lines === 3) {
+            this.model.score += 70;
+        }
+
+        if (count_removed_lines === 4) {
+            this.model.score += 150;
         }
     }
 
