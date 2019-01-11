@@ -219,7 +219,9 @@ class TextNode extends Node {
         super(x, y);
         this.text = text;
         this.font = font;
-        this.color = "#808080";
+        this.color = "#ffffff";
+        this.stroke_color = "#000000";
+        this.stroke_width = 2;
     }
 
     draw(engine){
@@ -230,7 +232,19 @@ class TextNode extends Node {
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillStyle = this.color;
+
+        ctx.shadowColor = "white";
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+        ctx.shadowBlur = 5;
+
         ctx.fillText(this.text, x, y);
+        if(this.stroke_color){
+            ctx.strokeStyle= this.stroke_color;
+            ctx.lineWidth = this.stroke_width;
+            ctx.strokeText(this.text, x, y);
+        }
+        ctx.shadowBlur = 0;
         ctx.closePath();
     }
 

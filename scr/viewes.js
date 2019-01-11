@@ -4,13 +4,22 @@ class GameScene extends Scene {
 
         this.new_game();
 
-        let text = new TextNode(GRID_SIZE * 5 + 20, 100, "Tetris", "48px roboto");
+        let text = new TextNode(204, 95, "Tetris JS", "48px Arial Black");
+        text.color = "#ffffff";
         this.add_child(text);
 
-        this.score_text = new TextNode(GRID_SIZE * 10 + 150, 175, "Score: 0", "36px roboto");
+        let back = new Sprite(300, 400, "assets/back.png");
+        back.scale = 0.5;
+        back.z = -9;
+        this.add_child(back);
+
+        this.score_text = new TextNode(480, 405, "Score: 0", "28px Arial Black");
         this.add_child(this.score_text);
 
-        this.level_text = new TextNode(GRID_SIZE * 10 + 150, 400, "Score: 0", "36px roboto");
+        this.row_text = new TextNode(480, 445, "Rows: 0", "28px Arial Black");
+        this.add_child(this.row_text);
+
+        this.level_text = new TextNode(480, 485, "Score: 0", "28px Arial Black");
         this.add_child(this.level_text);
 
         this.blocks = {};
@@ -56,33 +65,13 @@ class GameScene extends Scene {
     }
 
     static get_zero_position(){
-        let X = 20;
-        let Y = Engine.prototype.instance.canvas.height - 20;
+        let X = 44;
+        let Y = Engine.prototype.instance.canvas.height - 40;
         return [X, Y];
     }
 
     draw(engine){
         let [X, Y] = GameScene.get_zero_position();
-
-        //Draw grid
-        let ctx = engine.ctx;
-        ctx.beginPath();
-        for(let i=0; i<this.controller.model.width + 1; ++i){
-            let x = X + GRID_SIZE * i;
-            let y = Y - GRID_SIZE * this.controller.model.height;
-            ctx.moveTo(x, Y);
-            ctx.lineTo(x, y);
-            ctx.stroke();
-        }
-        for(let i=0; i<this.controller.model.height + 1; ++i){
-            let x = X + GRID_SIZE * this.controller.model.width;
-            let y = Y - GRID_SIZE * i;
-            ctx.moveTo(X, y);
-            ctx.lineTo(x, y);
-            ctx.strokeStyle = "#cccccc";
-            ctx.stroke();
-        }
-        ctx.closePath();
 
         //Draw figure
         for(let [i, j] of this.controller.model.current_figure.coords){
@@ -94,11 +83,20 @@ class GameScene extends Scene {
         }
 
         //Draw next figure
+        let max_i = 0.0;
+        let max_j = 0.0;
+        let min_i = 0.0;
+        let min_j = 0.0;
+        for(let [i, j] of this.controller.model.next_figure.coords){
+            max_i = Math.max(i, max_i);
+            max_j = Math.max(j, max_j);
+            min_i = Math.min(i, min_i);
+            min_j = Math.min(j, min_j);
+        }
         for(let [i, j] of this.controller.model.next_figure.coords){
             this.next_block_view.set_color(this.controller.model.next_figure.color);
-            this.next_block_view.set_coord(i + 14, j + 15);
-            this.next_block_view.x += 2;
-            this.next_block_view.y += 7;
+            this.next_block_view.x = 466 + i*GRID_SIZE;
+            this.next_block_view.y = 278 - j*GRID_SIZE;
             this.next_block_view.visit(engine);
         }
     }
