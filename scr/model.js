@@ -16,14 +16,9 @@ const COLORS = {
 };
 
 const BLOCK_COLORS = [
-    COLORS.PURPLE,
-    COLORS.LIGHT_BLUE,
-    COLORS.BLUE,
-    COLORS.RED,
-    COLORS.PINK,
-    COLORS.YELLOW,
-    COLORS.ORANGE,
-    COLORS.GREEN,
+    "blue",
+    "red",
+    "yellow",
 ];
 
 const figures = [

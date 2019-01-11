@@ -1,5 +1,5 @@
 class GameScene extends Scene {
-    constructor(){
+    constructor() {
         super(0, 0);
 
         this.new_game();
@@ -12,6 +12,8 @@ class GameScene extends Scene {
 
         this.level_text = new TextNode(GRID_SIZE * 10 + 150, 400, "Score: 0", "36px roboto");
         this.add_child(this.level_text);
+
+        this.blocks = {};
     }
 
     new_game(){
@@ -82,19 +84,6 @@ class GameScene extends Scene {
         }
         ctx.closePath();
 
-        //Draw cells
-        for(let i=0; i<this.controller.model.width; ++i) {
-            for (let j = 0; j < this.controller.model.height; ++j) {
-                let cell = this.controller.model.cells[i][j];
-                if(cell !== CELL_EMPTY){
-                    this.block_view.set_color(cell);
-                    this.block_view.
-        set_coord(i, j);
-                    this.block_view.visit(engine);
-                }
-            }
-        }
-
         //Draw figure
         for(let [i, j] of this.controller.model.current_figure.coords){
             let I = i + this.controller.model.current_figure.i;
@@ -113,29 +102,42 @@ class GameScene extends Scene {
             this.next_block_view.visit(engine);
         }
     }
+    on_join_block(i, j, color){
+        let block = new BlockView();
+        block.set_color(color);
+        block.set_coord(i, j);
+        this.add_child(block);
+
+        this.blocks[i*100 +j] = block;
+    }
+    on_remove_block(i, j){
+        this.remove_child(this.blocks[i*100 +j]);
+        this.blocks[i*100 +j] = undefined;
+    }
+    on_remove_line(index) {
+        for (let i = 0; i < this.controller.model.width; ++i) {
+            for (let j = index; j < this.controller.model.height; ++j) {
+                let block = this.blocks[i * 100 + j+1];
+                if(!block){
+                    continue;
+                }
+                block.set_coord(i, j);
+                this.blocks[i * 100 + j+1] = undefined;
+                this.blocks[i * 100 + j] = block;
+            }
+        }
+    }
 }
 
 class BlockView extends Node {
     constructor(){
         super();
-        this.color = COLORS.BLUE;
-        this.rect_1 = new Rect(0, 0, GRID_SIZE, GRID_SIZE, this.color);
-        this.rect_2 = new Rect(0, 0, GRID_SIZE - 2, GRID_SIZE - 2, this.color);
-        this.rect_2 = new Rect(0, 0, GRID_SIZE - 2, GRID_SIZE - 2, this.color);
-
-        this.add_child(this.rect_1);
-        this.add_child(this.rect_2);
-        this.set_color(COLORS.BLUE);
+        this.block = new Sprite(0, 0, "assets/block_blue.png");
+        this.block.scale = 0.5;
+        this.add_child(this.block);
     }
     set_color(color){
-        this.color = color;
-        this.rect_2.color = color;
-
-        let darkest = hex_to_rgb(color);
-        darkest.r = Math.round(darkest.r * 0.8);
-        darkest.g = Math.round(darkest.g * 0.8);
-        darkest.b = Math.round(darkest.b * 0.8);
-        this.rect_1.color = rgb_to_hex(darkest);
+        this.block.set_image("assets/block_" + color + ".png");
     }
     set_coord(i, j){
         let [X, Y] = GameScene.get_zero_position();

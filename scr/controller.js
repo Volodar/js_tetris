@@ -64,7 +64,6 @@ class GameController {
         };
 
         if(ev.key in offsets) {
-            console.log('ev in offsets');
             let [action, undo] = offsets[ev.key];
             action();
 
@@ -77,6 +76,7 @@ class GameController {
     join_current_figure(){
         for(let [i, j] of this.model.current_figure.coords){
             this.model.cells[i+this.model.current_figure.i][j+this.model.current_figure.j] = this.model.current_figure.color;
+            this.view.on_join_block(i+this.model.current_figure.i, j+this.model.current_figure.j, this.model.current_figure.color);
         }
     }
     generate_next_form(){
@@ -105,19 +105,12 @@ class GameController {
 
     has_collision() {
         let coords = this.model.current_figure.get_world_coords();
-        if (coords.every(([i, j]) =>
+        return !coords.every(([i, j]) =>
             i >= 0 &&
             i < this.model.width &&
             j >= 0 &&
             j < this.model.height &&
-            this.model.cells[i][j] === CELL_EMPTY))
-        {
-            console.log('все норм', coords, coords.every(([i, j]) => i >= 0 && i < this.model.width && j >= 0));
-            return false;
-        } else {
-            console.log('коллизия', coords, coords.every(([i, j]) => i >= 0 && i < this.model.width && j >= 0));
-            return true;
-        }
+            this.model.cells[i][j] === CELL_EMPTY);
     }
 
     find_matches(){
@@ -126,14 +119,18 @@ class GameController {
         };
 
         let remove_line = (index) => {
-            this.model.cells.forEach( (e) => {e[index] = CELL_EMPTY})
+            this.model.cells.forEach( (e, column) => {
+                e[index] = CELL_EMPTY;
+                this.view.on_remove_block(column, index);
+            });
         };
 
         let down_lines = (index) => {
+            this.view.on_remove_line(index);
             this.model.cells.map((e) => {
                 e.splice(index, 1);
                 e.push(CELL_EMPTY);
-            })
+            });
         };
         let count_removed_lines = 0;
         for(let line_index=0; line_index<this.model.height; line_index++){
