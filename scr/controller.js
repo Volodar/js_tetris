@@ -75,8 +75,12 @@ class GameController {
 
     join_current_figure(){
         for(let [i, j] of this.model.current_figure.coords){
-            this.model.cells[i+this.model.current_figure.i][j+this.model.current_figure.j] = this.model.current_figure.color;
-            this.view.on_join_block(i+this.model.current_figure.i, j+this.model.current_figure.j, this.model.current_figure.color);
+            let I = i+this.model.current_figure.i;
+            let J = j+this.model.current_figure.j;
+            if(J < this.model.height) {
+                this.model.cells[I][J] = this.model.current_figure.color;
+                this.view.on_join_block(I, J, this.model.current_figure.color);
+            }
         }
     }
     generate_next_form(){
@@ -109,8 +113,7 @@ class GameController {
             i >= 0 &&
             i < this.model.width &&
             j >= 0 &&
-            j < this.model.height &&
-            this.model.cells[i][j] === CELL_EMPTY);
+            (j >= this.model.height || this.model.cells[i][j] === CELL_EMPTY));
     }
 
     find_matches(){

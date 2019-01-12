@@ -71,8 +71,6 @@ class GameScene extends Scene {
     }
 
     draw(engine){
-        let [X, Y] = GameScene.get_zero_position();
-
         //Draw figure
         for(let [i, j] of this.controller.model.current_figure.coords){
             let I = i + this.controller.model.current_figure.i;
