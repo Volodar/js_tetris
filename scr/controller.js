@@ -56,10 +56,14 @@ class GameController {
             this.rotate_left()
         };
 
+        let next = () => {
+            this.timer = this.get_current_frequence();
+        };
+
         let offsets = {
             'ArrowLeft': [left, right],
             'ArrowRight': [right, left],
-            'ArrowDown': [down, up],
+            'ArrowDown': [down, up, next],
             'ArrowUp': [rotate_right, rotate_left],
         };
 
@@ -69,6 +73,9 @@ class GameController {
 
             if(this.has_collision()) {
                 undo();
+                if(offsets[ev.key].length > 2){
+                    offsets[ev.key][2]();
+                }
             }
         }
     }
