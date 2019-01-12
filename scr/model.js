@@ -19,6 +19,10 @@ const BLOCK_COLORS = [
     "blue",
     "red",
     "yellow",
+    "green",
+    "pink",
+    "orange",
+    "purple",
 ];
 
 const figures = [
