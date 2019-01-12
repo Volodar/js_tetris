@@ -23,6 +23,7 @@ class GameScene extends Scene {
         this.add_child(this.level_text);
 
         this.blocks = {};
+        this.timer = 0.0;
     }
 
     new_game(){
@@ -51,6 +52,7 @@ class GameScene extends Scene {
     }
 
     update(dt){
+        this.timer += dt;
         this.controller.update(dt);
         this.score_text.text = "Score: " + this.controller.model.score;
         this.level_text.text = "Level: " + (this.controller.model.level + 1);
@@ -75,6 +77,7 @@ class GameScene extends Scene {
         for(let [i, j] of this.controller.model.current_figure.coords){
             let I = i + this.controller.model.current_figure.i;
             let J = j + this.controller.model.current_figure.j;
+            J -= Math.min(1, this.timer / 0.1) - 1;
             this.block_view.set_color(this.controller.model.current_figure.color);
             this.block_view.set_coord(I, J);
             this.block_view.visit(engine);
@@ -97,6 +100,9 @@ class GameScene extends Scene {
             this.next_block_view.y = 278 - j*GRID_SIZE;
             this.next_block_view.visit(engine);
         }
+    }
+    on_figure_position_changed(){
+        this.timer = 0.0;
     }
     on_join_block(i, j, color){
         let block = new BlockView();

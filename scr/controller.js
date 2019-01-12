@@ -11,6 +11,7 @@ class GameController {
         let frequency = this.get_current_frequence();
         this.timer += dt;
         if(this.timer >= frequency && !this.game_finished && !this.game_paused){
+            this.view.on_figure_position_changed();
             this.timer = 0;
             this.model.current_figure.j -= 1;
             if(this.has_collision()){
